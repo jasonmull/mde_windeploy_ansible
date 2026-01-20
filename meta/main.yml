@@ -1,0 +1,34 @@
+galaxy_info:
+  author: "Jason Mull"
+  description: "Install Microsoft Defender for Endpoint using the preview deployment tool"
+  company: "Your Organization"
+  license: "MIT"
+  min_ansible_version: "2.12"
+  
+  platforms:
+    - name: Windows
+      versions:
+        - "7"
+        - "10" 
+        - "11"
+        - "2008R2"
+        - "2012R2"
+        - "2016"
+        - "2019"
+        - "2022"
+        - "2025"
+
+  galaxy_tags:
+    - security
+    - defender
+    - endpoint
+    - microsoft
+    - windows
+    - antivirus
+    - edr
+
+dependencies: []
+
+collections:
+  - ansible.windows
+  - community.windows
