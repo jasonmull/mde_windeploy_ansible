@@ -1,0 +1,53 @@
+---
+# Microsoft Defender for Endpoint installation
+
+- name: Create temp directory
+  win_file:
+    path: C:\temp\mde
+    state: directory
+
+- name: Copy deployment tool
+  win_copy:
+    src: DefenderDT.exe
+    dest: C:\temp\mde\DefenderDT.exe
+
+- name: Copy onboarding package
+  win_copy:
+    src: WindowsDefenderATP.onboarding
+    dest: C:\temp\mde\WindowsDefenderATP.onboarding
+
+- name: Install Microsoft Defender for Endpoint
+  win_shell: |
+    & "C:\temp\mde\DefenderDT.exe" {{ mde_options }}
+  args:
+    chdir: C:\temp\mde
+  register: install_result
+
+- name: Show result
+  debug:
+    msg: "{{ install_result.stdout }}"
+  when: not mde_quiet
+
+- name: Wait for services
+  pause:
+    seconds: 30
+
+- name: Check services
+  win_service_info:
+    name: "{{ item }}"
+  register: service_check
+  loop:
+    - Sense
+    - WinDefend
+
+- name: Show service status
+  debug:
+    msg: "{{ item.item }}: {{ item.services[0].state if item.services else 'Not Found' }}"
+  loop: "{{ service_check.results }}"
+  when: not mde_quiet
+
+- name: Cleanup
+  win_file:
+    path: C:\temp\mde
+    state: absent
+  when: mde_cleanup

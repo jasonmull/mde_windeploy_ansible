@@ -1,0 +1,6 @@
+---
+# MDE role defaults
+
+mde_quiet: true
+mde_cleanup: true
+mde_options: "-Quiet"
